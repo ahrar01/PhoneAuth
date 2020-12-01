@@ -1,32 +1,38 @@
 package com.ahraar.phoneauth.ui.home
 
-import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import com.ahraar.phoneauth.R
+import com.ahraar.phoneauth.databinding.HomeFragmentBinding
+import com.ahraar.phoneauth.utils.AuthUtil
 
 class HomeFragment : Fragment() {
+    private lateinit var binding: HomeFragmentBinding
 
-    companion object {
-        fun newInstance() = HomeFragment()
-    }
-
-    private lateinit var viewModel: HomeViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        return inflater.inflate(R.layout.home_fragment, container, false)
+    ): View {
+        binding = HomeFragmentBinding.inflate(inflater, container, false)
+        return binding.root
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProvider(this).get(HomeViewModel::class.java)
-        // TODO: Use the ViewModel
+
+        binding.logoutBtn.setOnClickListener {
+            AuthUtil.logOutUser().also {
+                this@HomeFragment.findNavController()
+                    .navigate(R.id.action_homeFragment_to_loginFragment)
+            }
+
+        }
+
     }
 
 }

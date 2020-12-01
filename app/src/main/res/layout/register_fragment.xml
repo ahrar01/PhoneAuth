@@ -13,12 +13,9 @@
         android:orientation="vertical">
 
         <RelativeLayout
-            android:id="@+id/profileRl"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/toolbarwrap"
             android:layout_marginTop="32dp"
-            android:gravity="center"
             android:padding="10dp">
 
 
@@ -26,6 +23,7 @@
                 android:id="@+id/profilePic"
                 android:layout_width="150dp"
                 android:layout_height="150dp"
+                android:layout_centerInParent="true"
                 android:src="@drawable/user_placeholder"
                 app:civ_border_color="@color/colorPrimary"
                 app:civ_border_width="1dp" />
@@ -36,7 +34,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignEnd="@+id/profilePic"
-                android:layout_alignBottom="@+id/profilePic"
+                android:layout_below="@id/profilePic"
                 android:elevation="4dp"
                 android:src="@drawable/uploadpic"
                 app:borderWidth="0dp"
@@ -50,8 +48,11 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/profilePic"
                 android:paddingTop="10dp"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="32dp"
                 android:paddingBottom="10dp"
                 android:text="Add Profile"
+                android:textAlignment="center"
                 android:textColor="@color/black"
                 android:textSize="20sp"
                 android:visibility="visible" />
@@ -94,6 +95,7 @@
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/email_edit_text"
                 android:layout_width="match_parent"
+                android:inputType="textEmailAddress"
                 android:layout_height="wrap_content"
                 android:hint="Enter Email" />
 
@@ -111,11 +113,22 @@
             android:text="Register"
             android:textAllCaps="false"
             android:textColor="@android:color/background_light"
-            android:textSize="16sp"
-             />
-
+            android:textSize="16sp" />
 
 
     </LinearLayout>
+
+
+    <!--for showing loading-->
+    <include
+        android:id="@+id/loadingLayout"
+        layout="@layout/loading"
+        android:visibility="gone" />
+
+    <!--for showing if there any issue-->
+    <include
+        android:id="@+id/issueLayout"
+        layout="@layout/issue_layout"
+        android:visibility="gone" />
 
 </FrameLayout>

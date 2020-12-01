@@ -1,7 +1,6 @@
 package com.ahraar.phoneauth.ui.otp_verify
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -69,10 +68,18 @@ class OTPVerifyFragment : Fragment() {
                         when (loadState) {
                             LoadState.SUCCESS -> {
                                 binding.otpProgressBar.visibility = View.GONE
+                                viewModel.getUserData().observe(viewLifecycleOwner, {
+                                    if (it) {
+                                        this@OTPVerifyFragment.findNavController()
+                                            .navigate(R.id.action_OTPVerifyFragment_to_homeFragment)
+                                        viewModel.doneNavigating()
+                                    } else {
+                                        this@OTPVerifyFragment.findNavController()
+                                            .navigate(R.id.action_OTPVerifyFragment_to_registerFragment2)
+                                        viewModel.doneNavigating()
+                                    }
+                                })
 
-                                this@OTPVerifyFragment.findNavController()
-                                    .navigate(R.id.action_OTPVerifyFragment_to_registerFragment)
-                                viewModel.doneNavigating()
                             }
                             LoadState.LOADING -> {
                                 binding.otpProgressBar.visibility = View.VISIBLE
@@ -95,7 +102,6 @@ class OTPVerifyFragment : Fragment() {
 
         viewModel.getVerificationCode().observe(viewLifecycleOwner,{
             verificationCode = it
-            Log.d("OTPVerifyyy",verificationCode)
         })
 
 

@@ -22,4 +22,6 @@ object AuthUtil {
     fun logOutUser() {
         return firebaseAuthInstance.signOut()
     }
+
+
 }

@@ -2,14 +2,11 @@ package com.ahraar.phoneauth.ui.otp_verify
 
 import android.app.Activity
 import android.util.Log
-import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.ahraar.phoneauth.utils.AuthUtil
-import com.ahraar.phoneauth.utils.ErrorMessage
 import com.ahraar.phoneauth.utils.LoadState
-import com.ahraar.phoneauth.utils.Utils.toast
 import com.google.android.gms.tasks.Task
 import com.google.firebase.FirebaseException
 import com.google.firebase.FirebaseTooManyRequestsException
@@ -35,7 +32,7 @@ class AuthViewModel : ViewModel() {
     private val auth = AuthUtil.firebaseAuthInstance
 
 
-    fun sendOtp(activity: Activity, mobile: String): LiveData<LoadState>  {
+    fun sendOtp(activity: Activity, mobile: String): LiveData<LoadState> {
         val number = "+91$mobile"
         val options = PhoneAuthOptions.newBuilder(auth)
             .setPhoneNumber(number)
@@ -49,7 +46,7 @@ class AuthViewModel : ViewModel() {
 
     }
 
-     fun signInWithPhoneAuthCredential(credential: PhoneAuthCredential) {
+    fun signInWithPhoneAuthCredential(credential: PhoneAuthCredential) {
         auth.signInWithCredential(credential)
             .addOnCompleteListener { task ->
                 if (task.isSuccessful) {
@@ -70,7 +67,7 @@ class AuthViewModel : ViewModel() {
         val noteRef = db.document("Users/" + user?.uid)
         noteRef.get()
             .addOnSuccessListener { data ->
-                if (data.exists()) {  //already created user
+                if (data != null) {  //already created user
                     //save profile in preference
                     dataExist.value = true
                 }
@@ -92,9 +89,9 @@ class AuthViewModel : ViewModel() {
         return taskResult
     }
 
-    fun clearOldAuth(){
-        credential.value=null
-        taskResult.value=null
+    fun clearOldAuth() {
+        credential.value = null
+        taskResult.value = null
     }
 
     fun getCredential(): LiveData<PhoneAuthCredential> {
@@ -111,7 +108,6 @@ class AuthViewModel : ViewModel() {
             Log.d(TAG, "onVerificationCompleted:$credential")
             this@AuthViewModel.credential.value = credential
             signInWithPhoneAuthCredential(credential)
-
 
 
 //            Handler(Looper.getMainLooper()).postDelayed({

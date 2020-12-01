@@ -10,9 +10,9 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.navOptions
 import com.ahraar.phoneauth.R
 import com.ahraar.phoneauth.databinding.LoginFragmentBinding
-import com.ahraar.phoneauth.ui.otp_verify.OTPVerifyFragmentDirections
 import com.ahraar.phoneauth.utils.AuthUtil
 import com.ahraar.phoneauth.utils.eventbus_events.KeyboardEvent
+import com.google.firebase.firestore.FirebaseFirestore
 import es.dmoral.toasty.Toasty
 import org.greenrobot.eventbus.EventBus
 
@@ -26,7 +26,7 @@ class LoginFragment : Fragment() {
     ): View {
         //check if user has previously logged in
         if (AuthUtil.firebaseAuthInstance.currentUser != null) {
-            findNavController().navigate(R.id.action_loginFragment_to_homeFragment)
+            fetchUser()
         }
         binding = LoginFragmentBinding.inflate(inflater, container, false)
         return binding.root
@@ -43,6 +43,24 @@ class LoginFragment : Fragment() {
 
     }
 
+    private fun fetchUser() {
+        val db = FirebaseFirestore.getInstance()
+        val user = AuthUtil.firebaseAuthInstance.currentUser
+        val noteRef = db.document("Users/" + user?.uid)
+        noteRef.get()
+            .addOnSuccessListener { data ->
+                if (data != null) {  //already created user
+                    //save profile in preference
+                    findNavController().navigate(R.id.action_loginFragment_to_homeFragment)
+                } else {
+                    findNavController().navigate(R.id.action_loginFragment_to_registerFragment)
+
+                }
+            }.addOnFailureListener {
+
+            }
+    }
+
     private fun sendOtp() {
         EventBus.getDefault().post(KeyboardEvent())
 
@@ -55,15 +73,16 @@ class LoginFragment : Fragment() {
             }
         }
 
-        if (binding.phoneNumberText.text.isEmpty() || binding.phoneNumberText.text.length < 10){
+        if (binding.phoneNumberText.text.isEmpty() || binding.phoneNumberText.text.length < 10) {
             Toasty.info(
                 requireContext(),
                 "Please Enter your 10 digit number",
                 Toast.LENGTH_SHORT
             ).show()
-        }else{
+        } else {
 
-            val action = LoginFragmentDirections.actionLoginFragmentToOTPVerifyFragment(binding.phoneNumberText.text.toString())
+            val action =
+                LoginFragmentDirections.actionLoginFragmentToOTPVerifyFragment(binding.phoneNumberText.text.toString())
 
             this@LoginFragment.findNavController()
                 .navigate(action, options)
