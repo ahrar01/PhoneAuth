@@ -62,7 +62,7 @@
         tools:layout="@layout/profile_fragment" />
     <fragment
         android:id="@+id/registerFragment"
-        android:name="com.ahraar.phoneauth.ui.resgisteration_page.RegisterFragment"
+        android:name="com.ahraar.phoneauth.ui.registeration_page.RegisterFragment"
         android:label="register_fragment"
         tools:layout="@layout/register_fragment" >
         <action

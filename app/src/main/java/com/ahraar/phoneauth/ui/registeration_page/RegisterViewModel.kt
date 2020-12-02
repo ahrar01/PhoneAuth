@@ -1,4 +1,4 @@
-package com.ahraar.phoneauth.ui.resgisteration_page
+package com.ahraar.phoneauth.ui.registeration_page
 
 import android.net.Uri
 import androidx.lifecycle.MutableLiveData
